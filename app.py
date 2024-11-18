@@ -1,67 +1,56 @@
 import streamlit as st
 
 # Streamlit Page Configuration
-st.set_page_config(page_title="Travel Buddy", layout="centered")
+st.set_page_config(page_title="Travel Buddy", layout="wide")
 
-# Background Image and Custom CSS
-page_bg = """
+# Inline HTML for Full-Screen Background and Content Layout
+background_html = """
 <style>
 body {
-    background-image: './env.jpeg' ; /* Reliable travel-themed image */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.main {
+    background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920');
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
-
-h1 {
-    color: #ffffff;
-    text-align: center;
-    font-size: 3rem;
-    margin-top: 20px;
-}
-
-.intro-box {
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+.content-box {
+    background: rgba(0, 0, 0, 0.7);
     color: #ffffff;
     padding: 20px;
-    border-radius: 10px;
-    margin: 20px auto;
+    border-radius: 15px;
     text-align: center;
     width: 80%;
+    max-width: 800px;
 }
-
-.intro-box h2 {
-    font-size: 2rem;
-}
-
-.intro-box p {
-    font-size: 1.2rem;
-    line-height: 1.6;
+.chat-icon {
+    position: absolute;
+    top: 20%;
+    right: 5%;
+    z-index: 1000;
+    cursor: pointer;
 }
 </style>
-"""
-
-st.markdown(page_bg, unsafe_allow_html=True)
-
-# App Title
-st.markdown("<h1>Travel Buddy</h1>", unsafe_allow_html=True)
-
-# Welcome Message and Introduction
-intro_text = """
-<div class="intro-box">
-    <h2>Welcome to Travel Buddy!</h2>
-    <p>
-        Your ultimate AI-powered travel assistant. Let us help you plan your journeys, discover new destinations, 
-        and answer any travel-related questions you may have. Whether you're dreaming of a relaxing beach holiday, 
-        a thrilling adventure, or a cultural city break, we're here to make your travel dreams come true!
-    </p>
-    <p>
-        Start chatting below to explore the best travel options, get recommendations, and enjoy a seamless travel planning experience.
-    </p>
+<div class="main">
+    <div class="content-box">
+        <h1>Travel Buddy</h1>
+        <p>Welcome to your AI-powered travel assistant! Let us guide you through your travel plans, provide destination suggestions, and answer all your travel questions.</p>
+        <p>Start chatting below to get personalized recommendations and make your travel planning seamless and enjoyable.</p>
+    </div>
+    <div class="chat-icon" id="chat-widget"></div>
 </div>
 """
-st.markdown(intro_text, unsafe_allow_html=True)
+
+# Inject HTML
+st.markdown(background_html, unsafe_allow_html=True)
 
 # Embed Watson Assistant Web Chat Script
 watson_chat_script = """
@@ -70,7 +59,11 @@ watson_chat_script = """
     integrationID: "6850854c-7e26-4fb8-a645-759885a79662", // The ID of this integration.
     region: "eu-gb", // The region your integration is hosted in.
     serviceInstanceID: "5942c55e-23f0-46bc-9149-00dd4ea5a70b", // The ID of your service instance.
-    onLoad: async (instance) => { await instance.render(); }
+    onLoad: async (instance) => { 
+        await instance.render(); 
+        const chatButton = document.querySelector('.chat-icon');
+        chatButton.addEventListener('click', () => instance.openWindow());
+    }
   };
   setTimeout(function(){
     const t=document.createElement('script');
@@ -81,5 +74,5 @@ watson_chat_script = """
 </script>
 """
 
-# Display Watson Chat Widget
-st.components.v1.html(watson_chat_script, height=500)
+# Embed Watson Chat Widget
+st.components.v1.html(watson_chat_script, height=500)  # Hide default widget; only icon is shown
