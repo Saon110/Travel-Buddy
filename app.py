@@ -1,12 +1,12 @@
 import streamlit as st
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+INTEGRATION_ID = st.secrets["WATSON_INTEGRATION_ID"]
+REGION = st.secrets["WATSON_REGION"]
+SERVICE_INSTANCE_ID = st.secrets["WATSON_SERVICE_INSTANCE_ID"]
 
-INTEGRATION_ID = os.getenv("WATSON_INTEGRATION_ID")
-REGION = os.getenv("WATSON_REGION")
-SERVICE_INSTANCE_ID = os.getenv("WATSON_SERVICE_INSTANCE_ID")
+print(INTEGRATION_ID)
+print(REGION)
+print(SERVICE_INSTANCE_ID)
 
 
 # Streamlit Page Configuration
