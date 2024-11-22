@@ -1,4 +1,13 @@
 import streamlit as st
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+INTEGRATION_ID = os.getenv("WATSON_INTEGRATION_ID")
+REGION = os.getenv("WATSON_REGION")
+SERVICE_INSTANCE_ID = os.getenv("WATSON_SERVICE_INSTANCE_ID")
+
 
 # Streamlit Page Configuration
 st.set_page_config(page_title="Travel Buddy", layout="wide")
@@ -53,24 +62,24 @@ body {
 st.markdown(background_html, unsafe_allow_html=True)
 
 # Embed Watson Assistant Web Chat Script
-watson_chat_script = """
+watson_chat_script = f"""
 <script>
-  window.watsonAssistantChatOptions = {
-    integrationID: "6850854c-7e26-4fb8-a645-759885a79662", // The ID of this integration.
-    region: "eu-gb", // The region your integration is hosted in.
-    serviceInstanceID: "5942c55e-23f0-46bc-9149-00dd4ea5a70b", // The ID of your service instance.
-    onLoad: async (instance) => { 
+  window.watsonAssistantChatOptions = {{
+    integrationID: "{INTEGRATION_ID}", // Integration ID from environment variables
+    region: "{REGION}", // Region from environment variables
+    serviceInstanceID: "{SERVICE_INSTANCE_ID}", // Service instance ID from environment variables
+    onLoad: async (instance) => {{ 
         await instance.render(); 
         const chatButton = document.querySelector('.chat-icon');
         chatButton.addEventListener('click', () => instance.openWindow());
-    }
-  };
-  setTimeout(function(){
+    }}
+  }};
+  setTimeout(function(){{
     const t=document.createElement('script');
     t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + 
           (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
     document.head.appendChild(t);
-  });
+  }});
 </script>
 """
 
